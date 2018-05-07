@@ -1,0 +1,37 @@
+{
+    "name": "ostart/gendiff-ostart-php",
+    "description": "Second PHP Hexlet Project GenDiff",
+    "type": "library",
+    "authors": [
+      {
+      	"name": "Artem Osta",
+      	"email": "artem.osta@gmail.com"
+      }
+    ],
+    "version": "0.0.1",
+    "bin": [
+      "bin/gendiff"
+    ],
+    "license": "MIT",
+    "autoload": {
+      "psr-4": {
+        "Php\\Package\\": "src",
+        "Php\\Package\\Tests\\": "tests"
+		},
+    	"files": [
+        
+      ]
+    },
+	"require": {
+      "docopt/docopt": "*"
+    },
+    "require-dev": {
+      "phpunit/phpunit": "*",
+      "squizlabs/php_codesniffer": "*"
+    },
+    "scripts": {
+      "phpcs": "phpcs",
+	    "phpunit": "phpunit",
+      "test": "phpunit tests"
+    }
+}
