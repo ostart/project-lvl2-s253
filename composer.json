@@ -19,7 +19,6 @@
         "Php\\Package\\Tests\\": "tests"
 		},
     	"files": [
-        
       ]
     },
 	"require": {
