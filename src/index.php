@@ -21,7 +21,7 @@ function getAst($objBefore, $objAfter)
     $strMinus = '  - ';
     $strTab = '    ';
 
-    $united = Collection\union(array_keys($objAfter), array_keys($objBefore));
+    $united = Collection\union(array_keys($objBefore), array_keys($objAfter));
     $result = array_reduce($united, function ($acc, $key) use ($objBefore, $objAfter, $strPlus, $strMinus, $strTab) {
         if (array_key_exists($key, $objBefore) && array_key_exists($key, $objAfter)) {
             if ($objAfter[$key] === $objBefore[$key]) {

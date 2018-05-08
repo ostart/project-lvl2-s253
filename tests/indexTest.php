@@ -9,11 +9,11 @@ class TestSolution extends TestCase
 {
     const RESULT = <<<DOC
 {
+    host: hexlet.io
   + timeout: 20
   - timeout: 50
-  + verbose: true
-    host: hexlet.io
   - proxy: 123.234.53.22
+  + verbose: true
 }
 DOC;
 
