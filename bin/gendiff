@@ -30,5 +30,5 @@ $format = $args["--format"];
 $pathToFileBefore = $args["<firstFile>"];
 $pathToFileAfter = $args["<secondFile>"];
 
-$diff = Differ\genDiff($format, $pathToFileBefore, $pathToFileAfter);
+$diff = Differ\genDiff($pathToFileBefore, $pathToFileAfter, $format);
 print_r($diff);

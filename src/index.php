@@ -4,7 +4,7 @@ namespace Differ;
 
 use Funct\Collection;
 
-function genDiff($format, $pathToFileBefore, $pathToFileAfter)
+function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
 {
     $fileDataBefore = file_get_contents($pathToFileBefore);
     $fileDataAfter = file_get_contents($pathToFileAfter);
@@ -25,20 +25,20 @@ function getAst($objBefore, $objAfter)
     $result = array_reduce($united, function ($acc, $key) use ($objBefore, $objAfter, $strPlus, $strMinus, $strTab) {
         if (array_key_exists($key, $objBefore) && array_key_exists($key, $objAfter)) {
             if ($objAfter[$key] === $objBefore[$key]) {
-                $keyTab = $strTab . $key;
-                $acc[$keyTab] = $objAfter[$key];
+                $value = $strTab . $key . ': ' . checkForBool($objAfter[$key]);
+                $acc[] = $value;
             } else {
-                $keyPlus = $strPlus . $key;
-                $keyMinus = $strMinus . $key;
-                $acc[$keyPlus] = $objAfter[$key];
-                $acc[$keyMinus] = $objBefore[$key];
+                $valPlus = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
+                $valMinus = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
+                $acc[] = $valPlus;
+                $acc[] = $valMinus;
             }
         } elseif (array_key_exists($key, $objAfter)) {
-            $keyPlus = $strPlus . $key;
-            $acc[$keyPlus] = $objAfter[$key];
+            $value = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
+            $acc[] = $value;
         } else {
-            $keyMinus = $strMinus . $key;
-            $acc[$keyMinus] = $objBefore[$key];
+            $value = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
+            $acc[] = $value;
         }
         return $acc;
     }, []);
@@ -47,9 +47,11 @@ function getAst($objBefore, $objAfter)
 
 function renderAst($ast)
 {
-    $outStr = array_reduce(array_keys($ast), function ($acc, $key) use ($ast) {
-        $value = (is_bool($ast[$key])) ? var_export($ast[$key], true) : $ast[$key];
-        return $acc . $key . ': ' . $value . PHP_EOL;
-    }, '');
-    return '{' . PHP_EOL . $outStr . '}';
+    $outStr = implode(PHP_EOL, $ast);
+    return '{' . PHP_EOL . $outStr .  PHP_EOL . '}';
+}
+
+function checkForBool($value)
+{
+    return is_bool($value) ? var_export($value, true) : $value;
 }
