@@ -4,6 +4,7 @@ namespace Differ;
 
 use Funct\Collection;
 use function Parser\parse;
+use function Render\rendAst;
 
 function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
 {
@@ -12,52 +13,64 @@ function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
     $extBefore = (new \SplFileInfo($pathToFileBefore))->getExtension();
     $extAfter = (new \SplFileInfo($pathToFileAfter))->getExtension();
     if ($extBefore !== $extAfter) {
-        throw new \Exception("Files extension can't be different.");
+        throw new \Exception("File extensions can't be different.");
     }
-    $objBefore = parse($fileDataBefore, $extBefore);
-    $objAfter = parse($fileDataAfter, $extAfter);
+    $arrBefore = parse($fileDataBefore, $extBefore);
+    $arrAfter = parse($fileDataAfter, $extAfter);
 
-    $ast = getAst($objBefore, $objAfter);
-    return renderAst($ast);
+    $ast = getAst($arrBefore, $arrAfter);
+    return rendAst($ast, $format);
 }
 
-function getAst($objBefore, $objAfter)
-{
-    $strPlus = '  + ';
-    $strMinus = '  - ';
-    $strTab = '    ';
+// function getAstOld($objBefore, $objAfter)
+// {
+//     $strPlus = '  + ';
+//     $strMinus = '  - ';
+//     $strTab = '    ';
 
-    $united = Collection\union(array_keys($objBefore), array_keys($objAfter));
-    $result = array_reduce($united, function ($acc, $key) use ($objBefore, $objAfter, $strPlus, $strMinus, $strTab) {
-        if (array_key_exists($key, $objBefore) && array_key_exists($key, $objAfter)) {
-            if ($objAfter[$key] === $objBefore[$key]) {
-                $value = $strTab . $key . ': ' . checkForBool($objAfter[$key]);
-                $acc[] = $value;
+//     $united = Collection\union(array_keys($objBefore), array_keys($objAfter));
+//     $result = array_reduce($united, function ($acc, $key) use ($objBefore, $objAfter, $strPlus, $strMinus, $strTab) {
+//         if (array_key_exists($key, $objBefore) && array_key_exists($key, $objAfter)) {
+//             if ($objAfter[$key] === $objBefore[$key]) {
+//                 $value = $strTab . $key . ': ' . checkForBool($objAfter[$key]);
+//                 $acc[] = $value;
+//             } else {
+//                 $valPlus = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
+//                 $valMinus = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
+//                 $acc[] = $valPlus;
+//                 $acc[] = $valMinus;
+//             }
+//         } elseif (array_key_exists($key, $objAfter)) {
+//             $value = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
+//             $acc[] = $value;
+//         } else {
+//             $value = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
+//             $acc[] = $value;
+//         }
+//         return $acc;
+//     }, []);
+//     return $result;
+// }
+
+function getAst($arrBefore, $arrAfter)
+{
+    $united = Collection\union(array_keys($arrBefore), array_keys($arrAfter));
+    $result = array_reduce($united, function ($acc, $key) use ($arrBefore, $arrAfter) {
+        if (array_key_exists($key, $arrBefore) && array_key_exists($key, $arrAfter)) {
+            if (is_array($arrBefore[$key]) && is_array($arrAfter[$key])) {
+                $acc[] = ['type' => 'nested', 'key' => $key, 'children' => getAst($arrBefore[$key], $arrAfter[$key])];
+            } elseif ($arrAfter[$key] === $arrBefore[$key]) {
+                $acc[] = ['type' => 'fixed', 'key' => $key, 'value' => $arrAfter[$key]];
             } else {
-                $valPlus = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
-                $valMinus = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
-                $acc[] = $valPlus;
-                $acc[] = $valMinus;
+                $acc[] = ['type' => 'updated', 'key' => $key,
+                            'valBefore' => $arrBefore[$key], 'valAfter' => $arrAfter[$key]];
             }
-        } elseif (array_key_exists($key, $objAfter)) {
-            $value = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
-            $acc[] = $value;
+        } elseif (array_key_exists($key, $arrAfter)) {
+            $acc[] = ['type' => 'added', 'key' => $key, 'valAfter' => $arrAfter[$key]];
         } else {
-            $value = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
-            $acc[] = $value;
+            $acc[] = ['type' => 'deleted', 'key' => $key, 'valBefore' => $arrBefore[$key]];
         }
         return $acc;
     }, []);
     return $result;
-}
-
-function renderAst($ast)
-{
-    $outStr = implode(PHP_EOL, $ast);
-    return '{' . PHP_EOL . $outStr .  PHP_EOL . '}';
-}
-
-function checkForBool($value)
-{
-    return is_bool($value) ? var_export($value, true) : $value;
 }

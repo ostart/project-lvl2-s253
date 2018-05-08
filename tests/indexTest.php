@@ -18,4 +18,16 @@ class TestSolution extends TestCase
         $expected = file_get_contents('tests/fixtures/expected.txt');
         $this->assertEquals($expected, genDiff('tests/fixtures/before.yml', 'tests/fixtures/after.yml'));
     }
+
+    public function testJsonRecursGenDiff()
+    {
+        $expected = file_get_contents('tests/fixtures/expectedRecurs.txt');
+        $this->assertEquals($expected, genDiff('tests/fixtures/beforeRecurs.json', 'tests/fixtures/afterRecurs.json'));
+    }
+
+    public function testYamlRecursGenDiff()
+    {
+        $expected = file_get_contents('tests/fixtures/expectedRecurs.txt');
+        $this->assertEquals($expected, genDiff('tests/fixtures/beforeRecurs.yml', 'tests/fixtures/afterRecurs.yml'));
+    }
 }

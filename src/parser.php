@@ -2,7 +2,6 @@
 
 namespace Parser;
 
-use Symfony\Component\Yaml\Parser;
 use Symfony\Component\Yaml\Yaml;
 
 function parse($fileContent, $fileExtension)
@@ -12,7 +11,6 @@ function parse($fileContent, $fileExtension)
             return json_decode($fileContent, true);
         case 'yml':
         case 'yaml':
-            //return (new Parser())->parse($fileContent, Yaml::PARSE_OBJECT_FOR_MAP);
             return Yaml::parse($fileContent);
     }
 }
