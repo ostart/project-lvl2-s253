@@ -25,3 +25,10 @@ Options:
 DOC;
 
 $args = (new \Docopt\Handler)->handle($doc);
+
+$format = $args["--format"];
+$pathToFileBefore = $args["<firstFile>"];
+$pathToFileAfter = $args["<secondFile>"];
+
+$diff = Differ\genDiff($format, $pathToFileBefore, $pathToFileAfter);
+print_r($diff);
