@@ -8,7 +8,7 @@
       	"email": "artem.osta@gmail.com"
       }
     ],
-    "version": "0.0.2",
+    "version": "0.3.0",
     "bin": [
       "bin/gendiff"
     ],
@@ -22,7 +22,8 @@
       ]
     },
 	"require": {
-      "docopt/docopt": "*"
+      "docopt/docopt": "*",
+      "funct/funct": "*"
     },
     "require-dev": {
       "phpunit/phpunit": "*",

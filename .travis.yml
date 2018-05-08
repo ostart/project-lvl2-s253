@@ -7,7 +7,3 @@ install:
   - make install
 
 script: make lint test
-
-after_script:
-  - vendor/bin/test-reporter
-
