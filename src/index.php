@@ -3,13 +3,19 @@
 namespace Differ;
 
 use Funct\Collection;
+use function Parser\parse;
 
 function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
 {
     $fileDataBefore = file_get_contents($pathToFileBefore);
     $fileDataAfter = file_get_contents($pathToFileAfter);
-    $objBefore = json_decode($fileDataBefore, true);
-    $objAfter = json_decode($fileDataAfter, true);
+    $extBefore = (new \SplFileInfo($pathToFileBefore))->getExtension();
+    $extAfter = (new \SplFileInfo($pathToFileAfter))->getExtension();
+    if ($extBefore !== $extAfter) {
+        throw new \Exception("Files extension can't be different.");
+    }
+    $objBefore = parse($fileDataBefore, $extBefore);
+    $objAfter = parse($fileDataAfter, $extAfter);
 
     $ast = getAst($objBefore, $objAfter);
     return renderAst($ast);
