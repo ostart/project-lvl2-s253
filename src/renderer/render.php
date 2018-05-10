@@ -9,5 +9,7 @@ function getRender($format)
             return new PrettyRender();
         case 'plain':
             return new PlainRender();
+        case 'json':
+            return new JsonRender();
     }
 }

@@ -8,7 +8,7 @@
       	"email": "artem.osta@gmail.com"
       }
     ],
-    "version": "0.7.0",
+    "version": "0.8.0",
     "bin": [
       "bin/gendiff"
     ],
@@ -25,6 +25,7 @@
         "src/renderer/render.php",
         "src/renderer/IRender.php",
         "src/renderer/PrettyRender.php",
+        "src/renderer/JsonRender.php",
         "src/renderer/PlainRender.php"
       ]
     },

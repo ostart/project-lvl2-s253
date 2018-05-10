@@ -40,4 +40,13 @@ class TestSolution extends TestCase
             'plain'
         ));
     }
+    public function testJsonOutputGenDiff()
+    {
+        $expected = file_get_contents('tests/fixtures/expectedRecursJson.txt');
+        $this->assertEquals($expected, genDiff(
+            'tests/fixtures/beforeRecurs.json',
+            'tests/fixtures/afterRecurs.json',
+            'json'
+        ));
+    }
 }
