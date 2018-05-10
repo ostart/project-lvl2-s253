@@ -4,7 +4,7 @@ namespace Differ;
 
 use Funct\Collection;
 use function Parser\parse;
-use function Render\rendAst;
+use function Render\getRender;
 
 function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
 {
@@ -19,38 +19,10 @@ function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
     $arrAfter = parse($fileDataAfter, $extAfter);
 
     $ast = getAst($arrBefore, $arrAfter);
-    return rendAst($ast, $format);
+    
+    $render = getRender($format);
+    return $render->rendAst($ast);
 }
-
-// function getAstOld($objBefore, $objAfter)
-// {
-//     $strPlus = '  + ';
-//     $strMinus = '  - ';
-//     $strTab = '    ';
-
-//     $united = Collection\union(array_keys($objBefore), array_keys($objAfter));
-//     $result = array_reduce($united, function ($acc, $key) use ($objBefore, $objAfter, $strPlus, $strMinus, $strTab) {
-//         if (array_key_exists($key, $objBefore) && array_key_exists($key, $objAfter)) {
-//             if ($objAfter[$key] === $objBefore[$key]) {
-//                 $value = $strTab . $key . ': ' . checkForBool($objAfter[$key]);
-//                 $acc[] = $value;
-//             } else {
-//                 $valPlus = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
-//                 $valMinus = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
-//                 $acc[] = $valPlus;
-//                 $acc[] = $valMinus;
-//             }
-//         } elseif (array_key_exists($key, $objAfter)) {
-//             $value = $strPlus . $key . ': ' . checkForBool($objAfter[$key]);
-//             $acc[] = $value;
-//         } else {
-//             $value = $strMinus . $key . ': ' . checkForBool($objBefore[$key]);
-//             $acc[] = $value;
-//         }
-//         return $acc;
-//     }, []);
-//     return $result;
-// }
 
 function getAst($arrBefore, $arrAfter)
 {
