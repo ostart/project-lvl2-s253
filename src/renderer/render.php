@@ -4,8 +4,8 @@ namespace Render;
 
 function rendAst($ast, $format)
 {
-    $renderList = [ 'pretty' => rendPretty($ast),
-                    'plain'  => rendPlain($ast),
-                    'json'   => rendJson($ast)];
+    $renderList = [ 'pretty' => Pretty\rendAst($ast),
+                    'plain'  => Plain\rendAst($ast),
+                    'json'   => Json\rendAst($ast)];
     return $renderList[$format];
 }

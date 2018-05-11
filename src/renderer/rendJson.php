@@ -1,8 +1,8 @@
 <?php
 
-namespace Render;
+namespace Render\Json;
 
-function rendJson($ast)
+function rendAst($ast)
 {
     return json_encode($ast);
 }

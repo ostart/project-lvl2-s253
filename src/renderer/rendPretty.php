@@ -1,11 +1,11 @@
 <?php
 
-namespace Render;
+namespace Render\Pretty;
 
 use Funct\Collection;
 use function Lib\checkForBool;
 
-function rendPretty($ast, $lvl = 0)
+function rendAst($ast, $lvl = 0)
 {
     $result = array_map(function ($node) use ($lvl) {
         switch ($node['type']) {
@@ -17,7 +17,7 @@ function rendPretty($ast, $lvl = 0)
                         str_repeat(getIndent('fixed'), $lvl) . getIndent('deleted') . $key . ': ' . $valFrom];
             case 'nested':
                 ['key' => $key, 'children' => $children] = $node;
-                $embedded = rendPretty($children, $lvl + 1);
+                $embedded = rendAst($children, $lvl + 1);
                 return str_repeat(getIndent('fixed'), $lvl) . getIndent('fixed') . $key . ': ' . $embedded;
             case 'fixed':
                 ['key' => $key, 'value' => $value] = $node;
@@ -49,7 +49,7 @@ function getIndent($type)
     }
 }
 
-function stringifyPretty($arr, $lvl = 0)
+function stringify($arr, $lvl = 0)
 {
     $keys = array_keys($arr);
     $strArr = array_reduce($keys, function ($acc, $key) use ($arr, $lvl) {
@@ -62,5 +62,5 @@ function stringifyPretty($arr, $lvl = 0)
 
 function getStrFromObj($obj, $lvl = 0)
 {
-    return is_array($obj) ? stringifyPretty($obj, $lvl) : checkForBool($obj);
+    return is_array($obj) ? stringify($obj, $lvl) : checkForBool($obj);
 }

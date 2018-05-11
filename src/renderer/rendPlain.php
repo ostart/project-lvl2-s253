@@ -1,10 +1,10 @@
 <?php
 
-namespace Render;
+namespace Render\Plain;
 
 use function Lib\checkForBool;
 
-function rendPlain($ast, $keyPathArr = [])
+function rendAst($ast, $keyPathArr = [])
 {
     $outStrArr = array_reduce($ast, function ($acc, $node) use ($keyPathArr) {
         ['key' => $key] = $node;
@@ -13,7 +13,7 @@ function rendPlain($ast, $keyPathArr = [])
         switch ($node['type']) {
             case 'added':
                 ['valAfter' => $valAfter] = $node;
-                $value = stringifyPlain($valAfter);
+                $value = stringify($valAfter);
                 $acc[] = "Property '{$keyPath}' was added with value: '{$value}'";
                 break;
             case 'deleted':
@@ -22,13 +22,13 @@ function rendPlain($ast, $keyPathArr = [])
                 break;
             case 'updated':
                 ['valBefore' => $valBefore, 'valAfter' => $valAfter] = $node;
-                $before = stringifyPlain($valBefore);
-                $after = stringifyPlain($valAfter);
+                $before = stringify($valBefore);
+                $after = stringify($valAfter);
                 $acc[] = "Property '{$keyPath}' was changed. From '{$before}' to '{$after}'";
                 break;
             case 'nested':
                 ['children' => $children] = $node;
-                $acc[] = rendPlain($children, $keyPathArr);
+                $acc[] = rendAst($children, $keyPathArr);
                 break;
             case 'fixed':
                 break;
@@ -38,7 +38,7 @@ function rendPlain($ast, $keyPathArr = [])
     return implode(PHP_EOL, $outStrArr);
 }
 
-function stringifyPlain($obj)
+function stringify($obj)
 {
     return is_array($obj) ? 'complex value' : checkForBool($obj);
 }
