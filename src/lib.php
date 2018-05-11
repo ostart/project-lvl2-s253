@@ -1,6 +1,6 @@
 <?php
 
-namespace Lib;
+namespace Differ\Lib;
 
 function checkForBool($value)
 {

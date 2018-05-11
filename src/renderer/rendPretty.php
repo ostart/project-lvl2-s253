@@ -1,9 +1,9 @@
 <?php
 
-namespace Render\Pretty;
+namespace Differ\Render\Pretty;
 
 use Funct\Collection;
-use function Lib\checkForBool;
+use function Differ\Lib\checkForBool;
 
 function rendAst($ast, $lvl = 0)
 {

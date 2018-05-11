@@ -1,6 +1,6 @@
 <?php
 
-namespace Render;
+namespace Differ\Render;
 
 function rendAst($ast, $format)
 {

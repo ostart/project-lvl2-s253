@@ -3,8 +3,8 @@
 namespace Differ;
 
 use Funct\Collection;
-use function Parser\parse;
-use function Render\rendAst;
+use function Differ\Parser\parse;
+use function Differ\Render\rendAst;
 
 function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
 {

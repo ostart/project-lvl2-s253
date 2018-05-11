@@ -1,8 +1,8 @@
 <?php
 
-namespace Render\Plain;
+namespace Differ\Render\Plain;
 
-use function Lib\checkForBool;
+use function Differ\Lib\checkForBool;
 
 function rendAst($ast, $keyPathArr = [])
 {

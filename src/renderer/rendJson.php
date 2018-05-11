@@ -1,6 +1,6 @@
 <?php
 
-namespace Render\Json;
+namespace Differ\Render\Json;
 
 function rendAst($ast)
 {
