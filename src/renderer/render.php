@@ -2,14 +2,14 @@
 
 namespace Render;
 
-function getRender($format)
+function rendAst($ast, $format)
 {
     switch ($format) {
         case 'pretty':
-            return new PrettyRender();
+            return rendPretty($ast);
         case 'plain':
-            return new PlainRender();
+            return rendPlain($ast);
         case 'json':
-            return new JsonRender();
+            return rendJson($ast);
     }
 }

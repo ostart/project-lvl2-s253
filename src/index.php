@@ -4,7 +4,7 @@ namespace Differ;
 
 use Funct\Collection;
 use function Parser\parse;
-use function Render\getRender;
+use function Render\rendAst;
 
 function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
 {
@@ -19,9 +19,8 @@ function genDiff($pathToFileBefore, $pathToFileAfter, $format = 'pretty')
     $arrAfter = parse($fileDataAfter, $extAfter);
 
     $ast = getAst($arrBefore, $arrAfter);
-    
-    $render = getRender($format);
-    return $render->rendAst($ast);
+
+    return rendAst($ast, $format);
 }
 
 function getAst($arrBefore, $arrAfter)
